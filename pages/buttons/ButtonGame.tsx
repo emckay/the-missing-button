@@ -1,8 +1,5 @@
-import { Text } from "@chakra-ui/react";
 import React, { useRef, useEffect } from "react";
-import { ImageSource, type Engine } from "excalibur";
-import { ButtonGameEngine } from "./button-game";
-import { ButtonSvg } from "./ButtonSvg";
+import { ButtonGameEngine } from "./game/ButtonGameEngine";
 
 /**
  * Workaround for https://github.com/excaliburjs/Excalibur/issues/1431
@@ -32,7 +29,7 @@ export const ButtonGame = () => {
     // HMR support
     resetGame();
 
-    import("./button-game").then(({ initialize, start }) => {
+    import("./game/button-game").then(({ initialize, start }) => {
       gameRef.current = initialize(canvasRef.current!);
       start(gameRef.current);
     });
