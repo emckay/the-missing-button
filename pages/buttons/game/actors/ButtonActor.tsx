@@ -15,10 +15,16 @@ import { ButtonGameEngine } from "../ButtonGameEngine";
 import { ButtonType, generateButtonTypes } from "../ButtonType";
 import ReactDomServer from "react-dom/server";
 
+export const BUTTON_ACTOR_NAME = "button";
 export class ButtonActor extends Actor {
   public button: ButtonType;
-  constructor(button: ButtonType, collider: Collider) {
-    super({ collider, color: new Color(0, 255, 0) });
+  constructor(button: ButtonType, unit: number) {
+    const size = unit * 10 * (button.size === "large" ? 1.75 : 1);
+    const collider =
+      button.shape === "round"
+        ? new CircleCollider({ radius: size / 2 })
+        : Shape.Box(size, size);
+    super({ collider, name: BUTTON_ACTOR_NAME });
     this.button = button;
   }
 }
@@ -29,26 +35,21 @@ export const getButtonActor = (
   unit: number,
   game: ButtonGameEngine
 ) => {
-  const size = unit * 10 * (button.size === "large" ? 1.75 : 1);
+  const actor = new ButtonActor(button, unit);
   const sprite = new Sprite({
     image,
-    destSize: { width: size, height: size },
+    destSize: { width: actor.width, height: actor.height },
   });
-  const collider =
-    button.shape === "round"
-      ? new CircleCollider({ radius: size / 2 })
-      : Shape.Box(size, size);
-  const actor = new ButtonActor(button, collider);
   actor.on("collisionstart", (e) => {
     if (e.other.name !== "frog") {
       return;
     }
-    const self = e.target;
-    console.log("thats not my button");
+    const self = e.target as ButtonActor;
     self.actions.moveTo(e.target.pos, 1);
     self.actions.scaleTo(vec(0, 0), vec(1, 1));
     game.buttonBeingDragged = null;
     game.buttonDragOffset = null;
+    game.onButtonGuess(self.button);
   });
   actor.graphics.add(sprite);
   return actor;
