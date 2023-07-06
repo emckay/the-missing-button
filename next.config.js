@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const path = require("path");
+
+const withPWA = require("next-pwa")({
+  dest: "public",
+});
+
 const nextConfig = {
   reactStrictMode: true,
   pageExtensions: ["page.tsx", "api.ts"],
@@ -17,4 +22,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withPWA(nextConfig);

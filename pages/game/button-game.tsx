@@ -1,11 +1,16 @@
-import { Color, DisplayMode, ImageSource, Loader, Sound } from "excalibur";
+import { Color, DisplayMode, ImageSource, Loader, Sound, vec } from "excalibur";
 import { mapValues, range } from "lodash";
 import { ButtonGameEngine } from "./ButtonGameEngine";
 import { adjectives, generateButtonTypes } from "./ButtonType";
-import { getButtonResources, roughenSvg } from "./actors/ButtonActor";
+import {
+  getButtonResources,
+  getSvgString,
+  roughenSvg,
+} from "./actors/ButtonActor";
 import { GameOverScene } from "./scenes/GameOverScene";
 import { MainScene } from "./scenes/MainScene";
 import { PlayButtonSvg } from "../PlayButtonSvg";
+import { LoadingLogo } from "../LoadingLogo";
 
 export function initialize(canvasElement: HTMLCanvasElement) {
   return new ButtonGameEngine({
@@ -64,8 +69,8 @@ export async function start(game: ButtonGameEngine) {
 
   loader.backgroundColor = "#ffffff";
   loader.loadingBarColor = Color.Black;
-  loader.logo =
-    "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+  loader.logo = LoadingLogo;
+  // loader.logoPosition = vec(game.canvasWidth / 2 / game.pixelRatio, game.unit * 20);
   loader.startButtonFactory = () => {
     let buttonElement: HTMLButtonElement = document.getElementById(
       "excalibur-play"
@@ -76,7 +81,7 @@ export async function start(game: ButtonGameEngine) {
 
     buttonElement.id = "excalibur-play";
     buttonElement.textContent = "Start";
-    buttonElement.style.backgroundColor = "blue";
+    buttonElement.style.backgroundColor = "#6298f0";
     buttonElement.style.fontFamily = "var(--abcursive-font)";
     // Initially hide the button
     buttonElement.style.display = "none";
