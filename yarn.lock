@@ -3101,10 +3101,10 @@ core-js-compat@^3.31.0:
   dependencies:
     browserslist "^4.21.9"
 
-core-js@3.23.3:
-  version "3.23.3"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.23.3.tgz#3b977612b15da6da0c9cc4aec487e8d24f371112"
-  integrity sha512-oAKwkj9xcWNBAvGbT//WiCdOMpb9XQG92/Fe3ABFM/R16BsHgePG00mFOgKf7IsCtfj8tA1kHtf/VwErhriz5Q==
+core-js@3.31.0:
+  version "3.31.0"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.31.0.tgz#4471dd33e366c79d8c0977ed2d940821719db344"
+  integrity sha512-NIp2TQSGfR6ba5aalZD+ZQ1fSxGhDo/s1w0nx3RYzf2pnJxt7YynxFlFScP6eV7+GZsKO95NSjGxyJsU3DZgeQ==
 
 cosmiconfig@^7.0.0:
   version "7.1.0"
@@ -3688,12 +3688,12 @@ eventemitter3@^4.0.4:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
 
-excalibur@^0.27.0:
-  version "0.27.0"
-  resolved "https://registry.yarnpkg.com/excalibur/-/excalibur-0.27.0.tgz#6e98d9d52393f96342b15a82d66246e154dcd21d"
-  integrity sha512-stbjNb3HD0ZEG3KKt1D8x558l4JNKFux1B5KlLoe+9SqxWTod/pYJqR/Nn6teB1vtCDnU3oYCnLo4FNQk6eJFA==
+excalibur@0.28.0-alpha.699:
+  version "0.28.0-alpha.699"
+  resolved "https://registry.yarnpkg.com/excalibur/-/excalibur-0.28.0-alpha.699.tgz#5ce504820c54ac4f14158bc32548d4844555113d"
+  integrity sha512-Aluu7VO7kq0Tpx86aaGDuav/g8d+etGL7hRyT3PgZXAvQr52EeNhc4tUp6A+0UItRhqm04LZWyjmFvRPc5gRMA==
   dependencies:
-    core-js "3.23.3"
+    core-js "3.31.0"
 
 execa@^5.0.0:
   version "5.1.1"
