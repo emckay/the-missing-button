@@ -1,8 +1,25 @@
 /** @type {import('next').NextConfig} */
 const path = require("path");
+const defaultRuntimeCaching = require("next-pwa/cache");
 
+console.log(defaultRuntimeCaching);
 const withPWA = require("next-pwa")({
   dest: "public",
+  runtimeCaching: [
+    // {
+    //   urlPattern: /.*\.mp3/,
+    //   method: "GET",
+    //   handler: "StaleWhileRevalidate",
+    //   options: {
+    //     cacheName: "audio",
+    //     expiration: {
+    //       maxEntries: 500,
+    //       maxAgeSeconds: 3650 * 24 * 60 * 60,
+    //     },
+    //   },
+    // },
+    ...defaultRuntimeCaching,
+  ],
 });
 
 const nextConfig = {
