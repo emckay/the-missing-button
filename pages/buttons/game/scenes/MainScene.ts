@@ -33,7 +33,10 @@ export class MainScene extends Scene {
   onActivate(context: SceneActivationContext): void {
     const game = context.engine as ButtonGameEngine;
     game.resetClues();
-    sample(game.starterSounds)?.play();
+    const starterSound = sample(game.starterSounds);
+    if (starterSound) {
+      game.playSound(starterSound);
+    }
     this.clear();
     const bg = new BackgroundImageActor(game);
     this.add(bg);

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { ButtonGameEngine } from "./game/ButtonGameEngine";
-import { Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 
 /**
  * Workaround for https://github.com/excaliburjs/Excalibur/issues/1431
@@ -43,9 +43,8 @@ export const ButtonGame = () => {
   }, []);
 
   return (
-    <>
-      <Text fontFamily="var(--abcursive-font)">Hello</Text>
+    <Flex justifyContent="center" alignItems="center">
       <canvas ref={canvasRef}></canvas>
-    </>
+    </Flex>
   );
 };

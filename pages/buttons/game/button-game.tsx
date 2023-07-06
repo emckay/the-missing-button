@@ -1,4 +1,4 @@
-import { ImageSource, Loader, Sound } from "excalibur";
+import { Color, DisplayMode, ImageSource, Loader, Sound } from "excalibur";
 import { mapValues, range } from "lodash";
 import { ButtonGameEngine } from "./ButtonGameEngine";
 import { adjectives, generateButtonTypes } from "./ButtonType";
@@ -8,7 +8,12 @@ import { MainScene } from "./scenes/MainScene";
 import { PlayButtonSvg } from "../PlayButtonSvg";
 
 export function initialize(canvasElement: HTMLCanvasElement) {
-  return new ButtonGameEngine({ canvasElement, width: 800, height: 600 });
+  return new ButtonGameEngine({
+    canvasElement,
+    width: 800,
+    height: 600,
+    displayMode: DisplayMode.FitScreen,
+  });
 }
 
 export async function start(game: ButtonGameEngine) {
@@ -56,6 +61,27 @@ export async function start(game: ButtonGameEngine) {
     ...starterSounds,
   ]);
   game.unit = game.canvasHeight / 100 / window.devicePixelRatio;
+
+  loader.backgroundColor = "#ffffff";
+  loader.loadingBarColor = Color.Black;
+  loader.logo =
+    "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+  loader.startButtonFactory = () => {
+    let buttonElement: HTMLButtonElement = document.getElementById(
+      "excalibur-play"
+    ) as HTMLButtonElement;
+    if (!buttonElement) {
+      buttonElement = document.createElement("button");
+    }
+
+    buttonElement.id = "excalibur-play";
+    buttonElement.textContent = "Start";
+    buttonElement.style.backgroundColor = "blue";
+    buttonElement.style.fontFamily = "var(--abcursive-font)";
+    // Initially hide the button
+    buttonElement.style.display = "none";
+    return buttonElement;
+  };
 
   await game.start(loader);
 

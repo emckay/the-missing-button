@@ -8,13 +8,8 @@ import {
   getBlankClues,
   getNextClue,
 } from "./ButtonType";
-import {
-  BUTTON_ACTOR_NAME,
-  ButtonActor,
-  roughenSvg,
-} from "./actors/ButtonActor";
+import { BUTTON_ACTOR_NAME, ButtonActor } from "./actors/ButtonActor";
 import { MainScene } from "./scenes/MainScene";
-import { PlayButtonSvg } from "../PlayButtonSvg";
 
 type ClueSounds = { [c in ClueCategory]: { [v: string]: Sound[] } };
 
@@ -42,9 +37,17 @@ export class ButtonGameEngine extends Engine {
   public usedButtons: ButtonType[] = [];
   public buttonResources: ImageSource[] = [];
 
+  public playingSound: Sound | null = null;
+
   public resetClues() {
     this.clues = getBlankClues();
     this.usedButtons = [];
+  }
+
+  public playSound(sound: Sound) {
+    this.playingSound?.stop();
+    sound?.play();
+    this.playingSound = sound;
   }
 
   public onButtonGuess(guess: ButtonType) {
@@ -55,7 +58,10 @@ export class ButtonGameEngine extends Engine {
     const res = getNextClue(guess, options, this.clues);
     if (res.isWinner) {
       this.goToScene("gameOver", { button: guess });
-      sample(this.winnerSounds)?.play();
+      const sound = sample(this.winnerSounds);
+      if (sound) {
+        this.playSound(sound);
+      }
       return;
     }
 
@@ -71,7 +77,10 @@ export class ButtonGameEngine extends Engine {
       res.clue.value &&
       this.clueSounds[res.clue.category][res.clue.value].length > 0
     ) {
-      sample(this.clueSounds[res.clue.category][res.clue.value])!.play();
+      const sound = sample(this.clueSounds[res.clue.category][res.clue.value]);
+      if (sound) {
+        this.playSound(sound);
+      }
     }
   }
 }
