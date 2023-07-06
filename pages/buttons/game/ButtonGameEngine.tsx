@@ -1,37 +1,20 @@
-import {
-  Actor,
-  BaseAlign,
-  Color,
-  Engine,
-  Font,
-  FontUnit,
-  ImageSource,
-  Label,
-  Scene,
-  Sound,
-  TextAlign,
-  Vector,
-  vec,
-} from "excalibur";
-import {
-  BUTTON_ACTOR_NAME,
-  ButtonActor,
-  getButtonActor,
-} from "./actors/ButtonActor";
+import { Engine, ImageSource, Sound, Vector } from "excalibur";
+import { sample } from "lodash";
 import {
   ButtonType,
   ClueCategory,
   Clues,
-  adjectives,
-  cluesToLabelTexts,
   generateButtonTypes,
   getBlankClues,
   getNextClue,
 } from "./ButtonType";
-import { random, range, sample, sampleSize, sum, sumBy } from "lodash";
-import { getFrogActor } from "./actors/FrogActor";
-import { ClueLabelActor } from "./actors/ClueLabelActor";
+import {
+  BUTTON_ACTOR_NAME,
+  ButtonActor,
+  roughenSvg,
+} from "./actors/ButtonActor";
 import { MainScene } from "./scenes/MainScene";
+import { PlayButtonSvg } from "../PlayButtonSvg";
 
 type ClueSounds = { [c in ClueCategory]: { [v: string]: Sound[] } };
 
@@ -47,6 +30,7 @@ export class ButtonGameEngine extends Engine {
   public backgroundImageResource = new ImageSource(
     "/button-assets/images/bg.jpg"
   );
+  public playButtonResource: ImageSource | undefined;
 
   public clues: Clues = getBlankClues();
 

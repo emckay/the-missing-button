@@ -77,18 +77,8 @@ const colorLabelToHex = (color: ButtonColor) => {
   return color;
 };
 
-export const getSvgString = async (button: ButtonType) => {
-  const baseColor = colorLabelToHex(button.color);
-  const props: ButtonSvgProps = {
-    rimColor: chroma.color(baseColor).darker().hex(),
-    baseColor: baseColor,
-    rimWidth: 10,
-    holes: button.holes,
-    shape: button.shape,
-  };
-  const origSvgString = ReactDomServer.renderToStaticMarkup(
-    <ButtonSvg {...props} />
-  );
+export const roughenSvg = async (component: React.ReactElement) => {
+  const origSvgString = ReactDomServer.renderToStaticMarkup(component);
   const input = document.createElement("div");
   input.innerHTML = origSvgString;
   const output = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -104,6 +94,18 @@ export const getSvgString = async (button: ButtonType) => {
   const svgString = output.outerHTML;
   const svgUrl = `data:image/svg+xml,${encodeURIComponent(svgString)}`;
   return svgUrl;
+};
+
+export const getSvgString = async (button: ButtonType) => {
+  const baseColor = colorLabelToHex(button.color);
+  const props: ButtonSvgProps = {
+    rimColor: chroma.color(baseColor).darker().hex(),
+    baseColor: baseColor,
+    rimWidth: 10,
+    holes: button.holes,
+    shape: button.shape,
+  };
+  return roughenSvg(<ButtonSvg {...props} />);
 };
 
 export const getButtonResources = async (buttons: ButtonType[]) => {

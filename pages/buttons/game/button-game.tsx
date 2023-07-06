@@ -2,9 +2,10 @@ import { ImageSource, Loader, Sound } from "excalibur";
 import { mapValues, range } from "lodash";
 import { ButtonGameEngine } from "./ButtonGameEngine";
 import { adjectives, generateButtonTypes } from "./ButtonType";
-import { getButtonResources } from "./actors/ButtonActor";
+import { getButtonResources, roughenSvg } from "./actors/ButtonActor";
 import { GameOverScene } from "./scenes/GameOverScene";
 import { MainScene } from "./scenes/MainScene";
+import { PlayButtonSvg } from "../PlayButtonSvg";
 
 export function initialize(canvasElement: HTMLCanvasElement) {
   return new ButtonGameEngine({ canvasElement, width: 800, height: 600 });
@@ -40,10 +41,15 @@ export async function start(game: ButtonGameEngine) {
   );
   game.starterSounds = starterSounds;
 
+  game.playButtonResource = new ImageSource(
+    await roughenSvg(<PlayButtonSvg />)
+  );
+
   const loader = new Loader([
     game.frogResource,
     game.happyFrogResource,
     game.backgroundImageResource,
+    game.playButtonResource,
     ...buttonResources,
     ...soundResources,
     ...winnerSounds,
@@ -56,8 +62,9 @@ export async function start(game: ButtonGameEngine) {
   const mainScene = new MainScene();
   const gameOverScene = new GameOverScene();
   game.addScene("main", mainScene);
-  game.goToScene("main");
+  // game.goToScene("main");
   game.addScene("gameOver", gameOverScene);
+  game.goToScene("gameOver");
   //@ts-ignore
   window.game = game;
 }

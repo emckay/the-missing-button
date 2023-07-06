@@ -1,5 +1,6 @@
 import {
   Actor,
+  Circle,
   Color,
   ImageSource,
   Scene,
@@ -39,6 +40,28 @@ export class GameOverScene extends Scene {
     happyFrog.on("pointerdown", () => {
       game.goToScene("main");
     });
+
+    const playButton = new Actor({
+      x: (game.canvasWidth / game.pixelRatio) * 0.8,
+      y: game.halfCanvasHeight / game.pixelRatio,
+      radius: unit * 7,
+      color: Color.White,
+    });
+    playButton.graphics.add(
+      new Sprite({
+        image: game.playButtonResource!,
+        destSize: { width: unit * 14, height: unit * 14 },
+      })
+    );
+    playButton.on("pointerdown", () => {
+      game.goToScene("main");
+    });
+    playButton.actions.repeatForever((ctx) => {
+      const speed = 0.3;
+      ctx.scaleTo(vec(1.05, 1.05), vec(speed, speed));
+      ctx.scaleTo(vec(1, 1), vec(speed, speed));
+    });
+    this.add(playButton);
     const bg = new BackgroundImageActor(game);
     this.add(happyFrog);
     this.add(bg);
