@@ -19,6 +19,33 @@ export type ButtonType = {
   shape: ButtonShape;
 };
 
+const clueToLabelTextString = (category: ClueCategory, value: string) => {
+  if (category === "holes") {
+    return `with ${value} holes`;
+  }
+  return value;
+};
+
+export const cluesToLabelTexts = (clues: Clues) => {
+  const preCategoryOrder: ClueCategory[] = ["size", "color", "shape"];
+  const postCategoryOrder: ClueCategory[] = ["holes"];
+  const labels = ["my"];
+  for (const cat of preCategoryOrder) {
+    const clue = clues[cat];
+    if (clue !== null) {
+      labels.push(clueToLabelTextString(cat, clue));
+    }
+  }
+  labels.push("button");
+  for (const cat of postCategoryOrder) {
+    const clue = clues[cat];
+    if (clue !== null) {
+      labels.push(clueToLabelTextString(cat, clue));
+    }
+  }
+  return labels;
+};
+
 const cartesianProduct = (...arrays: any[]) => {
   return arrays.reduce(
     (a, b) => {

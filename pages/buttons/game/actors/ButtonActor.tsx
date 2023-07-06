@@ -12,7 +12,12 @@ import {
 import { Svg2Roughjs } from "svg2roughjs";
 import { ButtonSvg, ButtonSvgProps } from "../../ButtonSvg";
 import { ButtonGameEngine } from "../ButtonGameEngine";
-import { ButtonType, generateButtonTypes } from "../ButtonType";
+import {
+  ButtonColor,
+  ButtonType,
+  doButtonsMatch,
+  generateButtonTypes,
+} from "../ButtonType";
 import ReactDomServer from "react-dom/server";
 
 export const BUTTON_ACTOR_NAME = "button";
@@ -44,6 +49,10 @@ export const getButtonActor = (
     if (e.other.name !== "frog") {
       return;
     }
+    if (game.usedButtons.find((ub) => doButtonsMatch(ub, button))) {
+      return;
+    }
+    game.usedButtons.push(button);
     const self = e.target as ButtonActor;
     self.actions.moveTo(e.target.pos, 1);
     self.actions.scaleTo(vec(0, 0), vec(1, 1));
@@ -55,10 +64,24 @@ export const getButtonActor = (
   return actor;
 };
 
+const colorLabelToHex = (color: ButtonColor) => {
+  if (color === "red") {
+    return "#f25f49";
+  }
+  if (color === "blue") {
+    return "#6298f0";
+  }
+  if (color === "black") {
+    return "#0A0A0A";
+  }
+  return color;
+};
+
 export const getSvgString = async (button: ButtonType) => {
+  const baseColor = colorLabelToHex(button.color);
   const props: ButtonSvgProps = {
-    rimColor: chroma.color(button.color).darker().hex(),
-    baseColor: button.color,
+    rimColor: chroma.color(baseColor).darker().hex(),
+    baseColor: baseColor,
     rimWidth: 10,
     holes: button.holes,
     shape: button.shape,
@@ -71,7 +94,7 @@ export const getSvgString = async (button: ButtonType) => {
   const output = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   const svg2roughjs = new Svg2Roughjs(output, undefined, {
     bowing: 3,
-    roughness: 1.4,
+    roughness: 1 + Math.random(),
     fillStyle: "hachure",
     fixedDecimalPlaceDigits: 3,
     seed: 1,

@@ -5,36 +5,62 @@ import {
   Engine,
   Font,
   FontUnit,
+  ImageSource,
   Label,
+  Scene,
   Sound,
   TextAlign,
   Vector,
   vec,
 } from "excalibur";
-import { BUTTON_ACTOR_NAME, ButtonActor } from "./actors/ButtonActor";
+import {
+  BUTTON_ACTOR_NAME,
+  ButtonActor,
+  getButtonActor,
+} from "./actors/ButtonActor";
 import {
   ButtonType,
   ClueCategory,
   Clues,
   adjectives,
+  cluesToLabelTexts,
+  generateButtonTypes,
   getBlankClues,
   getNextClue,
 } from "./ButtonType";
-import { sample } from "lodash";
+import { random, range, sample, sampleSize, sum, sumBy } from "lodash";
+import { getFrogActor } from "./actors/FrogActor";
+import { ClueLabelActor } from "./actors/ClueLabelActor";
+import { MainScene } from "./scenes/MainScene";
 
 type ClueSounds = { [c in ClueCategory]: { [v: string]: Sound[] } };
 
 export class ButtonGameEngine extends Engine {
   public buttonBeingDragged: ButtonActor | null = null;
   public buttonDragOffset: Vector | null = null;
+  public unit: number = 0;
+
+  public frogResource = new ImageSource("/button-assets/images/frog-sad.png");
+  public happyFrogResource = new ImageSource(
+    "/button-assets/images/frog-happy.png"
+  );
+  public backgroundImageResource = new ImageSource(
+    "/button-assets/images/bg.jpg"
+  );
 
   public clues: Clues = getBlankClues();
 
   public clueSounds: ClueSounds | undefined = undefined;
   public winnerSounds: Sound[] = [];
+  public starterSounds: Sound[] = [];
+
+  public buttons: ButtonType[] = generateButtonTypes();
+  public usedButtons: ButtonType[] = [];
+  public buttonResources: ImageSource[] = [];
 
   public resetClues() {
     this.clues = getBlankClues();
+    this.usedButtons = [];
   }
 
   public onButtonGuess(guess: ButtonType) {
@@ -44,7 +70,7 @@ export class ButtonGameEngine extends Engine {
     const options = buttonActors.map((a) => a.button);
     const res = getNextClue(guess, options, this.clues);
     if (res.isWinner) {
-      console.log("you win!");
+      this.goToScene("gameOver", { button: guess });
       sample(this.winnerSounds)?.play();
       return;
     }
@@ -53,33 +79,7 @@ export class ButtonGameEngine extends Engine {
     // @ts-ignore
     this.clues[res.clue.category] = res.clue.value;
 
-    const label = new Label({
-      text: res.clue.value!,
-      color: new Color(0, 0, 0),
-      font: new Font({
-        family: "__abcursive_713e5c",
-        size: 28,
-        unit: FontUnit.Px,
-        baseAlign: BaseAlign.Top,
-        textAlign: TextAlign.Left,
-      }),
-      anchor: vec(0, 0),
-    });
-    const background = new Actor({
-      width:
-        label.graphics.layers.get()[0].graphics[0].graphic.width *
-        this.pixelRatio *
-        1.2,
-      height:
-        label.graphics.layers.get()[0].graphics[0].graphic.height *
-        this.pixelRatio *
-        1.3,
-      color: new Color(255, 255, 255),
-      pos: vec(100, 100),
-      anchor: vec(0.035, 0.07),
-    });
-    background.addChild(label);
-    this.add(background);
+    (this.currentScene as MainScene).syncLabelsToClues(this);
 
     // Play sound.
     if (

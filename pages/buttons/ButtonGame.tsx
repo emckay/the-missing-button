@@ -18,6 +18,7 @@ function cleanUpPlayButtons() {
 export const ButtonGame = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameRef = useRef<ButtonGameEngine | null>(null);
+  const isGameStarting = useRef<boolean>(false);
 
   const resetGame = () => {
     if (gameRef.current) {
@@ -29,11 +30,14 @@ export const ButtonGame = () => {
   useEffect(() => {
     // HMR support
     resetGame();
-
-    import("./game/button-game").then(({ initialize, start }) => {
-      gameRef.current = initialize(canvasRef.current!);
-      start(gameRef.current);
-    });
+    if (!isGameStarting.current) {
+      isGameStarting.current = true;
+      import("./game/button-game").then(({ initialize, start }) => {
+        isGameStarting.current = false;
+        gameRef.current = initialize(canvasRef.current!);
+        start(gameRef.current);
+      });
+    }
 
     return resetGame;
   }, []);

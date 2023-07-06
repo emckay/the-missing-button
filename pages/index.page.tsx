@@ -1,7 +1,5 @@
-import { Box } from "@chakra-ui/react";
-import { useEffect } from "react";
-import { Game } from "@/components/game/Game";
+import Link from "next/link";
 
 export default function Index() {
-  return <Game />;
+  return <Link href="/buttons">Buttons</Link>;
 }
