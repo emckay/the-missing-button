@@ -88,9 +88,8 @@ export async function start(game: ButtonGameEngine) {
   const mainScene = new MainScene();
   const gameOverScene = new GameOverScene();
   game.addScene("main", mainScene);
-  // game.goToScene("main");
   game.addScene("gameOver", gameOverScene);
-  game.goToScene("gameOver");
+  game.goToScene("main");
   //@ts-ignore
   window.game = game;
 }

@@ -92,7 +92,6 @@ export const roughenSvg = async (component: React.ReactElement) => {
   svg2roughjs.svg = input.children[0] as SVGSVGElement;
   await svg2roughjs.sketch();
   const svgString = output.outerHTML;
-  console.log(svgString);
   const svgUrl = `data:image/svg+xml,${encodeURIComponent(svgString)}`;
   return svgUrl;
 };

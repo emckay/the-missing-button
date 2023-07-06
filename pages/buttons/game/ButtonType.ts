@@ -108,7 +108,7 @@ export const doesButtonMatchClues = (button: ButtonType, clues: Clues) => {
   return true;
 };
 type WinnerResult = { isWinner: true };
-type LoserResult = { isWinner: false };
+type LoserResult = { isWinner: false; wrongGuess: boolean };
 // prettier-ignore
 type Clue = 
 | { category: 'color', value: Required<Clues['color']>}
@@ -150,6 +150,7 @@ export const getNextClue = (
   buttonOptions: ButtonType[],
   knownClues: Clues
 ): NextClueResult => {
+  // Somehow the guess was not one of the options.
   if (buttonOptions.every((o) => !doButtonsMatch(o, guess))) {
     const res = findButtonMatchingClues(knownClues, buttonOptions, guess);
     if (res === null) {
@@ -158,7 +159,7 @@ export const getNextClue = (
         "button not in set and somehow no possible buttons found"
       );
     }
-    return { isWinner: false, clue: res };
+    return { isWinner: false, clue: res, wrongGuess: false };
   }
 
   // If guess is wrong for any of the known clues, not a winner and give that clue again.
@@ -169,6 +170,7 @@ export const getNextClue = (
     if (!isCorrect) {
       return {
         isWinner: false,
+        wrongGuess: true,
         clue: {
           category: clueCategory as ClueCategory,
           value: knownClues[clueCategory as ClueCategory],
@@ -184,6 +186,7 @@ export const getNextClue = (
   }
   return {
     isWinner: false,
+    wrongGuess: false,
     clue: res,
   };
 };

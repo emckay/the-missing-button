@@ -39,6 +39,19 @@ export class ButtonGameEngine extends Engine {
 
   public playingSound: Sound | null = null;
 
+  public levels = [
+    { count: 1, trials: 1 },
+    { count: 3, trials: 1 },
+    { count: 5, trials: 3 },
+    { count: 7, trials: 3 },
+    { count: 9, trials: 3 },
+    { count: 12, trials: 5 },
+  ];
+  public successfulTrialStreak = 0;
+  public failedTrialStreak = 0;
+  public wrongGuesses = 0;
+  public currentLevel = 0;
+
   public resetClues() {
     this.clues = getBlankClues();
     this.usedButtons = [];
@@ -58,11 +71,36 @@ export class ButtonGameEngine extends Engine {
     const res = getNextClue(guess, options, this.clues);
     if (res.isWinner) {
       this.goToScene("gameOver", { button: guess });
+      if (this.wrongGuesses === 0) {
+        this.failedTrialStreak = 0;
+        this.successfulTrialStreak += 1;
+        if (
+          this.successfulTrialStreak >= this.levels[this.currentLevel].trials
+        ) {
+          this.currentLevel = Math.min(
+            this.levels.length - 1,
+            this.currentLevel + 1
+          );
+          this.successfulTrialStreak = 0;
+        }
+      }
+      if (this.wrongGuesses > 0) {
+        this.successfulTrialStreak = 0;
+        this.failedTrialStreak += 1;
+        if (this.failedTrialStreak > 2) {
+          this.currentLevel = Math.max(0, this.currentLevel - 1);
+          this.failedTrialStreak = 0;
+        }
+      }
+      this.wrongGuesses = 0;
       const sound = sample(this.winnerSounds);
       if (sound) {
         this.playSound(sound);
       }
       return;
+    }
+    if (res.wrongGuess) {
+      this.wrongGuesses += 1;
     }
 
     // Update clues (TODO: add clue text to screen)

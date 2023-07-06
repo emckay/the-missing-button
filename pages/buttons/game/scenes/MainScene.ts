@@ -42,7 +42,10 @@ export class MainScene extends Scene {
     this.add(bg);
     const unit = game.unit;
     this.syncLabelsToClues(game, false);
-    const actors = sampleSize(range(0, game.buttons.length), 5).map((i) => {
+    const actors = sampleSize(
+      range(0, game.buttons.length),
+      game.levels[game.currentLevel].count
+    ).map((i) => {
       return getButtonActor(
         game.buttons[i],
         game.buttonResources[i],
