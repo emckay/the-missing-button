@@ -6,6 +6,23 @@
   "lang": "en-US",
   "theme_color": "#6298f0",
   "display": "fullscreen",
+  "background_color": "#ffffff",
+  "orientation": "landscape",
+  "categories": ["games"],
+  "screenshots": [
+    {
+      "src": "images/screenshot1.png",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Help the frog find his missing button."
+    },
+    {
+      "src": "/images/screenshot2.webp",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Levels get progressively harder as the player understands the game."
+    }
+  ],
   "icons": [
     {
       "src": "/button-assets/icons/152.png",
