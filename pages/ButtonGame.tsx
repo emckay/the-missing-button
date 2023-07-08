@@ -43,7 +43,11 @@ export const ButtonGame = () => {
   }, []);
 
   return (
-    <Flex justifyContent="center" alignItems="center">
+    <Flex
+      justifyContent="center"
+      alignItems="center"
+      __css={{ touchAction: "manipulation", userSelect: "none" }}
+    >
       <canvas ref={canvasRef}></canvas>
     </Flex>
   );
